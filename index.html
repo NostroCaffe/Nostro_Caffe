@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Nostro Caffè · Cocina artesanal hecha al momento y café de especialidad de Balboa de San Ramón. San Juan de San Ramón, Alajuela, Costa Rica.">
 <meta name="theme-color" content="#0b3d2f">
-<link rel="canonical" href="https://derekvg27.github.io/Nostro_Caffe/">
+<link rel="canonical" href="https://nostrocaffe.github.io/Nostro_Caffe/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nostro Caffè">
 <meta property="og:title" content="Nostro Caffè · San Juan de San Ramón">
 <meta property="og:description" content="Cocina artesanal hecha al momento y café de especialidad de Balboa de San Ramón. Menú, horario y Club Nostro.">
-<meta property="og:url" content="https://derekvg27.github.io/Nostro_Caffe/">
-<meta property="og:image" content="https://derekvg27.github.io/Nostro_Caffe/og.png">
+<meta property="og:url" content="https://nostrocaffe.github.io/Nostro_Caffe/">
+<meta property="og:image" content="https://nostrocaffe.github.io/Nostro_Caffe/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:locale" content="es_CR"><meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://derekvg27.github.io/Nostro_Caffe/og.png">
+<meta name="twitter:image" content="https://nostrocaffe.github.io/Nostro_Caffe/og.png">
 <link rel="icon" type="image/png" href="favicon.png">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
@@ -735,6 +735,8 @@ a.status:hover{border-color:var(--gold);color:var(--beige)}
 @media (max-width:860px){.proc{grid-template-columns:1fr}.proc-stage{max-width:360px}}
 button.btn-ghost{background:transparent}
 
+.new-b.ed{background:var(--emerald-hi)}
+
 .card{gap:0}
 </style>
 
@@ -1252,7 +1254,7 @@ button.btn-ghost{background:transparent}
   </div>
 </div>
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CafeOrCoffeeShop","name":"Nostro Caffè","description":"Cafetería y cocina artesanal: todo se prepara al momento. Café de especialidad de Balboa de San Ramón.","url":"https://derekvg27.github.io/Nostro_Caffe/","telephone":"+506 8422-2212","servesCuisine":["Costarricense","Italiana","Café de especialidad"],"priceRange":"₡₡","address":{"@type":"PostalAddress","streetAddress":"65 m norte del cruce de la plaza","addressLocality":"San Juan, San Ramón","addressRegion":"Alajuela","addressCountry":"CR"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"15:00","closes":"19:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Friday","opens":"12:30","closes":"20:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"09:00","closes":"20:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"09:00","closes":"19:30"}],"sameAs":["https://www.instagram.com/nostrocaffecr/","https://www.facebook.com/share/1CSvMrHqMe/","https://maps.app.goo.gl/ucJyTeNpP876kSFy5"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CafeOrCoffeeShop","name":"Nostro Caffè","description":"Cafetería y cocina artesanal: todo se prepara al momento. Café de especialidad de Balboa de San Ramón.","url":"https://nostrocaffe.github.io/Nostro_Caffe/","telephone":"+506 8422-2212","servesCuisine":["Costarricense","Italiana","Café de especialidad"],"priceRange":"₡₡","address":{"@type":"PostalAddress","streetAddress":"65 m norte del cruce de la plaza","addressLocality":"San Juan, San Ramón","addressRegion":"Alajuela","addressCountry":"CR"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"15:00","closes":"19:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Friday","opens":"12:30","closes":"20:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"09:00","closes":"20:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"09:00","closes":"19:30"}],"sameAs":["https://www.instagram.com/nostrocaffecr/","https://www.facebook.com/share/1CSvMrHqMe/","https://maps.app.goo.gl/ucJyTeNpP876kSFy5"]}</script>
 
 <script>
 /* ---------- DATA ---------- */
@@ -1420,7 +1422,15 @@ function parsePrice(str){
 function applyCustom(list){
   CUSTOM=list||[];
   ["cocina","bebidas"].forEach(w=>{MENU[w]=JSON.parse(JSON.stringify(BASE_MENU[w]));});
-  CUSTOM.forEach(x=>{
+  const toTags=x=>String(x.tags||"").split(",").map(t=>t.trim()).filter(Boolean).map(t=>t==="Firma Nostro"?SIG:t);
+  // 1) cambios a platos de la carta original (id sin "x-")
+  CUSTOM.filter(x=>!/^x-/.test(x.id)).forEach(x=>{
+    for(const w of ["cocina","bebidas"])for(const c of MENU[w]){const it=c.items.find(k=>itemId(c.cat,k[0])===x.id);
+      if(it){const p=parsePrice(x.precio);if(x.nombre)it[0]=x.nombre;if(p)it[1]=p;it[2]=x.desc||"";it[3]=toTags(x);it[4]=null;it[5]=x.id;
+        if(typeof EXTRA_EN!=="undefined"){if(x.nombre_en)EXTRA_EN[x.nombre]=x.nombre_en;if(x.desc_en&&x.desc)EXTRA_EN[x.desc]=x.desc_en;}}}
+  });
+  // 2) platos nuevos
+  CUSTOM.filter(x=>/^x-/.test(x.id)).forEach(x=>{
     const w=x.mundo==="bebidas"?"bebidas":"cocina";
     let c=MENU[w].find(k=>norm(k.cat)===norm(x.cat));
     if(!c){c={cat:x.cat,items:[]};MENU[w].push(c);}
@@ -1797,8 +1807,8 @@ function admRender(){
     const ds=String(x.dias).toLowerCase().split(/[\s,]+/).map(d=>d.slice(0,2));
     h+=`<div class="adm-row${x.activo?"":" off"}" data-i="${i}">
       <label class="sw"><input type="checkbox" data-f="activo" ${x.activo?"checked":""} aria-label="Mostrar ${esc(x.nombre)}"><span></span></label>
-      <div class="nm">${esc(x.nombre)}${/^x-/.test(x.id)?' <span class="new-b">Nuevo</span>':""}<small>${x.activo?"Visible":"Oculto"}</small>
-        <span class="row-act"><button type="button" data-fotos="${esc(x.id)}">Fotos (${fotosDe(x.id).length})</button>${/^x-/.test(x.id)?`<button type="button" data-edit="${esc(x.id)}">Editar</button><button type="button" class="danger" data-del="${esc(x.id)}">Eliminar</button>`:""}</span></div>
+      <div class="nm">${esc(x.nombre)}${/^x-/.test(x.id)?' <span class="new-b">Nuevo</span>':CUSTOM.some(k=>k.id===x.id)?' <span class="new-b ed">Editado</span>':""}<small>${x.activo?"Visible":"Oculto"}</small>
+        <span class="row-act"><button type="button" data-fotos="${esc(x.id)}">Fotos (${fotosDe(x.id).length})</button><button type="button" data-edit="${esc(x.id)}">Editar</button>${/^x-/.test(x.id)?`<button type="button" class="danger" data-del="${esc(x.id)}">Eliminar</button>`:""}</span></div>
       <div class="days" aria-label="Días">${[3,4,5,6,0,1,2].map(d=>`<label><input type="checkbox" data-day="${DIAS[d]}" ${ds.includes(DIAS[d])?"checked":""}><span>${DIA_CORTO[d].slice(0,2)}</span></label>`).join("")}</div>
       <div class="hrs"><input type="text" data-f="horas" value="${esc(x.horas)}" placeholder="Todo el horario" aria-label="Horas de ${esc(x.nombre)}"></div>
     </div>`;
@@ -1885,14 +1895,21 @@ function tagOptions(w,sel){
   return opts.map(t=>`<label class="tg"><input type="checkbox" value="${esc(t)}" ${sel.includes(t)?"checked":""}><span>${esc(t)}</span></label>`).join("");
 }
 function priceToText(p){return Array.isArray(p)?p.map(([l,v])=>l+": "+v).join(", "):String(p||"");}
+function baseAsDish(id){
+  for(const w of ["cocina","bebidas"])for(const c of MENU[w])for(const it of c.items){if(keyOf(c,it)===id){
+    return{id,mundo:w,cat:c.cat,nombre:it[0],desc:it[2]||"",precio:priceToText(it[1]),tags:(it[3]||[]).map(t=>t===SIG?"Firma Nostro":t).join(", "),
+      nombre_en:(typeof EXTRA_EN!=="undefined"&&EXTRA_EN[it[0]])||EN[it[0]]||"",desc_en:(typeof EXTRA_EN!=="undefined"&&EXTRA_EN[it[2]])||EN[it[2]]||"",base:true};}}
+  return null;
+}
 function openDishForm(id){
-  const x=id?CUSTOM.find(k=>k.id===id):null;
+  const x=id?(/^x-/.test(id)?CUSTOM.find(k=>k.id===id):baseAsDish(id)):null;
   const w=x?x.mundo:"cocina";
   const tags=x?String(x.tags||"").split(",").map(t=>t.trim()):[];
   $("#aForm").innerHTML=`<h4>${x?"Editar plato":"Nuevo plato"}</h4>
     <div class="af-grid">
-      <div class="f"><label for="dfW">Sección</label><select id="dfW"><option value="cocina" ${w==="cocina"?"selected":""}>Cocina</option><option value="bebidas" ${w==="bebidas"?"selected":""}>Bebidas</option></select></div>
-      <div class="f"><label for="dfCat">Categoría</label><select id="dfCat">${catOptions(w,x?x.cat:"")}</select><input id="dfCatNew" placeholder="Nombre de la nueva categoría" hidden></div>
+      ${x&&x.base?'<p class="adm-help full">Plato de la carta original: puedes cambiar nombre, descripción, precio y etiquetas. La sección y la categoría se mantienen.</p>':""}
+      <div class="f"><label for="dfW">Sección</label><select id="dfW" ${x&&x.base?"disabled":""}><option value="cocina" ${w==="cocina"?"selected":""}>Cocina</option><option value="bebidas" ${w==="bebidas"?"selected":""}>Bebidas</option></select></div>
+      <div class="f"><label for="dfCat">Categoría</label><select id="dfCat" ${x&&x.base?"disabled":""}>${catOptions(w,x?x.cat:"")}</select><input id="dfCatNew" placeholder="Nombre de la nueva categoría" hidden></div>
       <div class="f full"><label for="dfName">Nombre del plato</label><input id="dfName" maxlength="80" value="${esc(x?x.nombre:"")}" placeholder="Ej. Gallo Pinto de la Abuela"></div>
       <div class="f full"><label for="dfDesc">Descripción</label><textarea id="dfDesc" rows="3" maxlength="500" placeholder="Ingredientes y acompañamientos">${esc(x?x.desc:"")}</textarea></div>
       <div class="f"><label for="dfNameEn">Nombre en inglés (opcional)</label><input id="dfNameEn" maxlength="80" value="${esc(x?x.nombre_en||"":"")}" placeholder="Ej. Grandma's Gallo Pinto"></div>
@@ -1918,6 +1935,10 @@ document.addEventListener("click",async e=>{
     const cat=$("#dfCat").value==="__nueva"?$("#dfCatNew").value.trim():$("#dfCat").value;
     const plato={id:t.dataset.id||"",mundo:$("#dfW").value,cat,nombre:$("#dfName").value.trim(),desc:$("#dfDesc").value.trim(),precio:$("#dfPrice").value.trim(),nombre_en:$("#dfNameEn").value.trim(),desc_en:$("#dfDescEn").value.trim(),
       tags:[...document.querySelectorAll("#dfTags input:checked")].map(i=>i.value).join(", ")};
+    const orig=t.dataset.id&&!/^x-/.test(t.dataset.id)?baseAsDish(t.dataset.id):null;
+    if(orig){ // si cambió el texto en español pero no el inglés, no dejar una traducción vieja
+      if(plato.desc!==orig.desc&&plato.desc_en===orig.desc_en)plato.desc_en="";
+      if(plato.nombre!==orig.nombre&&plato.nombre_en===orig.nombre_en)plato.nombre_en="";}
     if(!plato.nombre){$("#dfErr").textContent="Escribe el nombre del plato.";return;}
     if(!cat){$("#dfErr").textContent="Elige o escribe una categoría.";return;}
     if(!parsePrice(plato.precio)){$("#dfErr").textContent="Escribe el precio, por ejemplo 4500.";return;}
