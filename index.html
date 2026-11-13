@@ -1542,6 +1542,20 @@ body.intro-on{overflow:hidden}
 .fi-hint{color:#8a6d36!important}
 @media print{body.print-ficha *{visibility:hidden!important}body.print-ficha #fiSheet,body.print-ficha #fiSheet *{visibility:visible!important}body.print-ficha #fiSheet{position:absolute;left:0;top:0;width:100%;padding:0;background:#fff}body.print-ficha{background:#fff!important}body.print-ficha .fi-hint{display:none}}
 .ci-pick select,.ci-pick input{background:rgba(7,9,8,.6);border:1px solid rgba(233,220,195,.2);color:var(--beige);padding:8px 10px;font:inherit;font-size:.88rem;letter-spacing:0;text-transform:none}.ci-pick select option{background:#0b1612}
+
+.adm-tabs [data-badge]:not([data-badge=""])::after{content:attr(data-badge);display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:var(--crimson);color:#fff;font-size:.66rem;font-family:var(--f-mono);vertical-align:middle}
+.rec-aviso{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;margin-bottom:10px;border-left:2px solid #7fc79a;background:rgba(127,199,154,.08);font-size:.9rem}.rec-aviso.no{border-color:#c0453c;background:rgba(192,69,60,.08)}
+.rec-prop{border:1px solid rgba(201,162,92,.4);background:rgba(201,162,92,.06);padding:14px;display:grid;gap:8px}
+.rp-o{display:flex;gap:8px;align-items:flex-start;font-size:.9rem}.rp-o small{color:var(--beige-dim)}
+.rp-t td{padding:4px 8px;font-size:.84rem}.rp-pre{white-space:pre-wrap;font-family:inherit;font-size:.86rem;margin:0;padding:8px 10px;background:rgba(7,9,8,.4);color:var(--beige-dim)}
+.rp-fi{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:0;font-size:.86rem}.rp-fi dt{color:var(--gold,#c9a25c)}.rp-fi dd{margin:0;color:var(--beige-dim)}
+.rp-obs{font-size:.86rem;color:var(--beige-dim)}.rp-obs ul{margin:4px 0 0;padding-left:18px}
+
+.me-q{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media (max-width:900px){.me-q{grid-template-columns:1fr 1fr}}@media (max-width:520px){.me-q{grid-template-columns:1fr}}
+.me-c{padding:12px;border:1px solid rgba(233,220,195,.12);border-top:2px solid var(--c,#c9a25c);display:grid;gap:4px;font-size:.84rem}.me-c b{color:var(--beige)}.me-c b small{color:var(--beige-dim);font-weight:400}.me-c p{margin:0;color:var(--beige-dim);font-size:.78rem}.me-c span{color:var(--beige)}
+.me-c.estrella,.me-chip.estrella{--c:#7fc79a}.me-c.caballo,.me-chip.caballo{--c:#d9b25f}.me-c.enigma,.me-chip.enigma{--c:#8fb4e0}.me-c.perro,.me-chip.perro{--c:#e2766f}
+.me-chip{font-size:.72rem;color:var(--c);border:1px solid var(--c);padding:1px 7px;white-space:nowrap}.me-t small{color:var(--beige-dim)}.me-f{color:#d9b25f!important}
+.vn-prev tr.bajo td{background:rgba(192,69,60,.1)}
 </style>
 
 <div id="intro" aria-hidden="true">
@@ -2110,6 +2124,7 @@ body.intro-on{overflow:hidden}
           <b>Arrastra aquí el archivo o toca para elegirlo</b><small>CSV o Excel (.xlsx, .xls)</small></label>
         <div id="vnMap"></div>
         <div id="ciOut"></div>
+        <div id="meOut"></div>
         <div id="vnCargas"></div>
       </div>
       <div class="adm-sec" data-sec="equipo" hidden>
@@ -3058,7 +3073,7 @@ document.querySelectorAll(".adm-tabs [data-tab]").forEach(b=>b.onclick=()=>{
   if(b.dataset.tab==="cats")admRenderCats();
   if(b.dataset.tab==="reservas")rvLoad();
   if(b.dataset.tab==="stats")tbLoad();
-  if(b.dataset.tab==="ventas"){vnCargas();ciLoad();}
+  if(b.dataset.tab==="ventas"){vnCargas();ciLoad();meLoad();}
   if(b.dataset.tab==="recetas")recLoad();
   if(b.dataset.tab==="ficha")fiLoad();
   if(b.dataset.tab==="equipo")eqLoad(true);
@@ -3183,22 +3198,40 @@ async function recLoad(){
   $("#recOut").innerHTML='<p class="note-sm">Cargando recetas…</p>';
   try{const [r,ri]=await Promise.all([api({accion:"recetas_lista",token:admTok()}),api({accion:"insumos_lista",token:admTok()}).catch(()=>({ok:false}))]);
     if(!r.ok){$("#recOut").innerHTML=`<p class="note-sm">${r.error==="sesion"?"La sesión expiró. Ingresa de nuevo.":"No se pudieron cargar. ¿Actualizaste el Apps Script?"}</p>`;return;}
-    REC.lista=r.recetas||[];REC.sol=r.solicitudes||[];REC.rol=r.rol;REC.desfase=r.ahora?r.ahora-Date.now():0;REC.chef=r.chef||null;INS=ri.ok?(ri.insumos||[]):[];INS_OK=!!ri.ok;recRender();}
+    REC.lista=r.recetas||[];REC.sol=r.solicitudes||[];REC.rol=r.rol;REC.desfase=r.ahora?r.ahora-Date.now():0;REC.permisos=r.permisos||[];REC.rechazadas=r.rechazadas||[];REC.ia=!!r.ia;recBadge();REC.chef=r.chef||null;INS=ri.ok?(ri.insumos||[]):[];INS_OK=!!ri.ok;recRender();}
   catch(_){$("#recOut").innerHTML='<p class="note-sm">No se pudo conectar.</p>';}
 }
 const U_OPC=["g","kg","ml","l","u","oz","cda","cdta","taza","pizca","rebanada","porción"];
 function recPlatos(){const o=[];["cocina","bebidas"].forEach(w=>MENU[w].forEach(c=>c.items.forEach(it=>o.push({id:keyOf(c,it),n:it[0],d:it[2]||"",nota:c.note||"",cat:c.cat,p:+it[1]||0}))));return o;}
-const recLibre=e=>REC.rol!=="chef"||!e.id||(e.editableHasta&&e.editableHasta>recAhora());
+const recVentana=e=>!!(e.editableHasta&&e.editableHasta>recAhora());
+const recPerm=(id,t)=>(REC.permisos||[]).find(p=>p.receta===id&&p.tipo===t&&p.vence>recAhora());
+const recLibre=e=>REC.rol!=="chef"||!e.id||recVentana(e)||!!recPerm(e.id,"editar");
+const recBorrable=e=>REC.rol!=="chef"||recVentana(e)||!!recPerm(e.id,"eliminar");
+const recHora=ms=>new Date(ms-(REC.desfase||0)).toLocaleString("es-CR",{weekday:"short",hour:"numeric",minute:"2-digit"});
+function recBadge(){const b=document.querySelector('.adm-tabs [data-tab="recetas"]');if(!b)return;const n=REC.rol==="chef"?(REC.permisos||[]).length:(REC.sol||[]).length;b.dataset.badge=n||"";}
+function solTxt(s){return {permiso_editar:"Permiso para editar",permiso_eliminar:"Permiso para eliminar",eliminar:"Eliminar",editar:"Modificar"}[s.tipo]||s.tipo;}
+function recVista(e){
+  const pend=t=>(REC.sol||[]).some(s=>s.receta===e.id&&s.tipo==="permiso_"+t),pd=recPerm(e.id,"eliminar");
+  const btn=t=>pend(t)?`<span class="note-sm">Solicitud de ${t==="editar"?"edición":"eliminación"} enviada · esperando aprobación</span>`:`<button type="button" class="btn ${t==="editar"?"btn-gold":"btn-ghost"}" data-rperm="${t}">Pedir permiso para ${t}</button>`;
+  return `<div class="rec-ed" id="recEd"><div class="rec-ed-h"><h4>${esc(e.nombre)}</h4><span class="note-sm">Solo lectura. Para cambiar o eliminar esta receta necesitas un permiso del administrador; son permisos separados.</span></div>
+    <p class="note-sm">${e.porciones} ${e.porciones===1?"porción":"porciones"}${e.tiempo?" · "+e.tiempo+" min":""}</p>
+    <div class="hm-wrap"><table class="vn-prev"><thead><tr><th>Ingrediente</th><th>Cantidad</th><th>Unidad</th></tr></thead><tbody>${e.ingredientes.map(i=>`<tr><td>${esc(i.n)}</td><td>${i.c||"—"}</td><td>${esc(i.u)}</td></tr>`).join("")}</tbody></table></div>
+    ${e.pasos?`<div class="fi-blk"><h5>Preparación</h5><p>${esc(e.pasos).replace(/\n/g,"<br>")}</p></div>`:""}
+    <label class="dm-f">Motivo (opcional, lo ve el administrador)<input id="rpMot" maxlength="300" placeholder="Ej.: cambiamos de proveedor de queso, ajustar cantidades"></label>
+    <div class="urg-act">${btn("editar")}${pd?`<button type="button" class="linkbtn danger" id="reDel">Eliminar receta (aprobado)</button>`:btn("eliminar")}<button class="btn btn-ghost" type="button" id="reCancel">Volver</button><span class="note-sm" id="reMsg"></span></div></div>`;}
 const recAhora=()=>Date.now()+(REC.desfase||0);
 function recEditor(){
   const e=REC.edit,pl=recPlatos(),libre=recLibre(e),fi=e.ficha||{};
-  return `<div class="rec-ed" id="recEd"><div class="rec-ed-h"><h4>${e.id?"Editar receta":"Nueva receta"}</h4>${REC.rol==="chef"&&e.id?(libre?`<span class="note-sm rec-ok">Puedes corregirla o borrarla directamente hasta las ${new Date(e.editableHasta-(REC.desfase||0)).toLocaleTimeString("es-CR",{hour:"numeric",minute:"2-digit"})} (5 minutos después de crearla).</span>`:`<span class="note-sm">Ya pasaron los 5 minutos: tus cambios se enviarán al administrador para aprobación.</span>`):""}</div>
+  if(!libre)return recVista(e);
+  const pe=REC.rol==="chef"&&e.id?recPerm(e.id,"editar"):null;
+  return `<div class="rec-ed" id="recEd"><div class="rec-ed-h"><h4>${e.id?"Editar receta":"Nueva receta"}</h4>${REC.rol==="chef"&&e.id?(recVentana(e)?`<span class="note-sm rec-ok">Puedes corregirla o borrarla directamente hasta las ${new Date(e.editableHasta-(REC.desfase||0)).toLocaleTimeString("es-CR",{hour:"numeric",minute:"2-digit"})} (5 minutos después de crearla).</span>`:pe?`<span class="note-sm rec-ok">Edición aprobada por el administrador${pe.enUso?" · tienes hasta "+recHora(pe.vence)+" para terminar":" · vale hasta "+recHora(pe.vence)+"; al guardar tienes 30 min para seguir ajustando"}.</span>`:""):""}</div>
     <div class="rec-g"><label class="dm-f">Plato del menú (opcional)<select id="reP"><option value="">— Receta independiente —</option>${pl.map(p=>`<option value="${esc(p.id)}" ${p.id===e.plato?"selected":""}>${esc(p.cat)} · ${esc(p.n)}</option>`).join("")}</select></label>
       <label class="dm-f">Nombre de la receta<input id="reN" maxlength="90" value="${esc(e.nombre||"")}"></label>
       <label class="dm-f">Porciones<input id="rePo" type="number" min="1" max="100" value="${e.porciones||1}"></label>
       <label class="dm-f">Tiempo (min)<input id="reT" type="number" min="0" max="600" value="${e.tiempo||""}"></label></div>
-    <div class="rec-ing-h"><b>Ingredientes</b><span><button type="button" class="btn btn-ghost" id="reAuto">Detectar ingredientes</button>${asisData&&asisData.iaDisponible?`<button type="button" class="linkbtn" id="reIA">Afinar con IA</button>`:""}</span></div>
-    <p class="note-sm">El desglose automático usa el nombre y la descripción del plato con cantidades típicas por porción. Revísalo y corrige lo que haga falta.</p>
+    <div class="rec-ing-h"><b>Ingredientes</b><span><button type="button" class="btn btn-ghost" id="reAuto">Detectar ingredientes</button>${REC.ia||(asisData&&asisData.iaDisponible)?`<button type="button" class="btn btn-gold" id="reEst" title="Ordena ingredientes, unidades, preparación y ficha técnica. Tú decides qué aplicar.">✦ Estandarizar con IA</button>`:""}</span></div>
+    <p class="note-sm">«Detectar» arma el desglose con cantidades típicas por porción. «Estandarizar con IA» ordena nombres, unidades, preparación y la ficha técnica: te muestra la propuesta y tú eliges qué aplicar. La IA no cambia el nombre ni las porciones, no borra ingredientes y no modifica cantidades que ya pusiste más de un 50 %.</p>
+    ${REC.prop?recPropHtml(REC.prop,e):""}
     <div class="hm-wrap"><table class="rec-t"><thead><tr><th>Ingrediente</th><th>Cantidad</th><th>Unidad</th><th></th></tr></thead><tbody id="reIng">${(e.ingredientes||[]).map((i,k)=>recFila(i,k)).join("")}</tbody></table></div>
     <button type="button" class="linkbtn" id="reAdd">+ Agregar ingrediente</button>
     ${REC.rol==="admin"?`<div class="rec-cost" id="reCost">${recCostoHtml(e)}</div>`:""}
@@ -3211,8 +3244,22 @@ function recEditor(){
       <label class="dm-f">Vida útil<input id="fiV" maxlength="200" value="${esc(fi.vida||"")}" placeholder="Ej.: 3 días refrigerado"></label>
       <label class="dm-f">Alérgenos<input id="fiA" maxlength="300" value="${esc(fi.alergenos||"")}" placeholder="Gluten, lácteos, huevo…"></label>
       <label class="dm-f">Puntos críticos de control<input id="fiP" maxlength="600" value="${esc(fi.control||"")}" placeholder="Temperatura interna 74 °C, no recalentar dos veces…"></label></div></fieldset>
-    <div class="urg-act"><button class="btn btn-gold" type="button" id="reSave">${libre?"Guardar receta":"Enviar cambios para aprobación"}</button><button class="btn btn-ghost" type="button" id="reCancel">Cancelar</button>${e.id?`<button type="button" class="linkbtn danger" id="reDel">${libre?"Eliminar receta":"Solicitar eliminación"}</button>`:""}<span class="note-sm" id="reMsg"></span></div></div>`;
+    <div class="urg-act"><button class="btn btn-gold" type="button" id="reSave">Guardar receta</button><button class="btn btn-ghost" type="button" id="reCancel">Cancelar</button>${e.id&&recBorrable(e)?`<button type="button" class="linkbtn danger" id="reDel">Eliminar receta</button>`:""}<span class="note-sm" id="reMsg"></span></div></div>`;
 }
+
+function recPropHtml(P,e){
+  const camb=P.ingredientes.map((x,i)=>{const o=e.ingredientes[i]||{};const d=o.n!==x.n||+o.c!==+x.c||o.u!==x.u;return d?`<tr><td>${esc(o.n||"")}${o.c?` · ${o.c} ${esc(o.u)}`:""}</td><td>→</td><td><b>${esc(x.n)}</b> · ${x.c} ${esc(x.u)}</td></tr>`:"";}).join("");
+  const fi=Object.entries(P.ficha).filter(([,v])=>v);
+  const FN={montaje:"Montaje",utensilios:"Utensilios",conservacion:"Conservación",vida:"Vida útil",alergenos:"Alérgenos",control:"Puntos críticos"};
+  return `<div class="rec-prop" id="recProp"><div class="rec-ing-h"><b>✦ Propuesta de la IA</b><span class="note-sm">Nada se guarda hasta que apliques y toques «Guardar receta».</span></div>
+    <label class="rp-o"><input type="checkbox" data-rpsel="ing" ${camb?"checked":"disabled"}> <span><b>Ingredientes normalizados</b> ${camb?"":"(sin cambios)"}</span></label>
+    ${camb?`<div class="hm-wrap"><table class="vn-prev rp-t"><tbody>${camb}</tbody></table></div>`:""}
+    ${P.sugeridos.length?`<p class="note-sm"><b>Ingredientes que podrían faltar</b> (no se agregan si no los marcas):</p>${P.sugeridos.map((x,i)=>`<label class="rp-o"><input type="checkbox" data-rpsel="s${i}"> <span>${esc(x.n)}${x.c?` · ${x.c} ${esc(x.u)}`:""}${x.motivo?` <small>— ${esc(x.motivo)}</small>`:""}</span></label>`).join("")}`:""}
+    ${P.pasos?`<label class="rp-o"><input type="checkbox" data-rpsel="pasos" checked> <span><b>Preparación estandarizada</b></span></label><pre class="rp-pre">${esc(P.pasos)}</pre>`:""}
+    ${P.tiempo&&P.tiempo!==e.tiempo?`<label class="rp-o"><input type="checkbox" data-rpsel="tiempo" checked> <span><b>Tiempo:</b> ${P.tiempo} min</span></label>`:""}
+    ${fi.length?`<label class="rp-o"><input type="checkbox" data-rpsel="ficha" checked> <span><b>Ficha técnica</b> (solo llena o reemplaza los campos que trae)</span></label><dl class="rp-fi">${fi.map(([k,v])=>`<dt>${FN[k]}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:""}
+    ${P.observaciones.length?`<div class="rp-obs"><b>Observaciones</b><ul>${P.observaciones.map(o=>`<li>${esc(o)}</li>`).join("")}</ul></div>`:""}
+    <div class="urg-act"><button type="button" class="btn btn-gold" id="rpSi">Aplicar lo marcado</button><button type="button" class="btn btn-ghost" id="rpNo">Descartar</button></div></div>`;}
 const recFila=(i,k)=>`<tr data-k="${k}"><td><input data-rf="n" value="${esc(i.n||"")}" maxlength="80"></td><td><input data-rf="c" type="number" step="any" min="0" value="${i.c||""}" placeholder="0"></td><td><select data-rf="u">${U_OPC.map(u=>`<option ${u===i.u?"selected":""}>${u}</option>`).join("")}</select></td><td><button type="button" class="linkbtn danger" data-rdel="${k}" aria-label="Quitar">×</button></td></tr>`;
 function recLeerEd(){const e=REC.edit;e.plato=$("#reP").value;e.nombre=$("#reN").value;e.porciones=+$("#rePo").value||1;e.tiempo=+$("#reT").value||"";e.pasos=$("#reS").value;e.notas=$("#reNo").value;
   e.ficha={montaje:$("#fiM").value,utensilios:$("#fiU").value,conservacion:$("#fiC").value,vida:$("#fiV").value,alergenos:$("#fiA").value,control:$("#fiP").value};
@@ -3220,7 +3267,8 @@ function recLeerEd(){const e=REC.edit;e.plato=$("#reP").value;e.nombre=$("#reN")
 function recRender(){
   const q=norm(REC.q||""),L=REC.lista.filter(r=>!q||norm(r.nombre+" "+r.ingredientes.map(i=>i.n).join(" ")).includes(q));
   const pend=REC.sol;
-  $("#recOut").innerHTML=`${pend.length?`<section class="rec-sol"><h4>${REC.rol==="admin"?"Solicitudes del chef por aprobar":"Tus solicitudes pendientes"} (${pend.length})</h4>${pend.map(s=>`<div class="rec-sol-i"><div><b>${s.tipo==="eliminar"?"Eliminar":"Modificar"}: ${esc(s.nombre)}</b><small>${esc(s.fecha)}${s.tipo==="editar"&&s.datos?" · "+recDiff(s):""}</small></div>${REC.rol==="admin"?`<span><button type="button" class="btn btn-gold" data-rsol="${esc(s.id)}" data-ap="1">Aprobar</button><button type="button" class="btn btn-ghost" data-rsol="${esc(s.id)}" data-ap="0">Rechazar</button></span>`:`<span class="note-sm">Esperando aprobación</span>`}</div>`).join("")}</section>`:""}
+  const avisos=REC.rol==="chef"?(REC.permisos||[]).map(p=>`<div class="rec-aviso"><span>✅ <b>Aprobado:</b> puedes ${p.tipo==="editar"?"editar":"eliminar"} «${esc(p.nombre)}» · ${p.enUso?"hasta":"vale hasta"} ${recHora(p.vence)}</span><button type="button" class="btn btn-gold" data-redit="${esc(p.receta)}">${p.tipo==="editar"?"Editar ahora":"Abrir"}</button></div>`).join("")+(REC.rechazadas||[]).slice(-2).map(p=>`<div class="rec-aviso no"><span>El administrador no concedió el permiso para ${p.tipo==="editar"?"editar":"eliminar"} «${esc(p.nombre)}».</span></div>`).join(""):"";
+  $("#recOut").innerHTML=avisos+`${pend.length?`<section class="rec-sol"><h4>${REC.rol==="admin"?"Solicitudes del chef por aprobar":"Tus solicitudes pendientes"} (${pend.length})</h4>${pend.map(s=>`<div class="rec-sol-i"><div><b>${solTxt(s)}: ${esc(s.nombre)}</b><small>${esc(s.fecha)}${s.tipo==="editar"&&s.datos?" · "+recDiff(s):""}${s.datos&&s.datos.motivo?" · «"+esc(s.datos.motivo)+"»":""}</small></div>${REC.rol==="admin"?`<span><button type="button" class="btn btn-gold" data-rsol="${esc(s.id)}" data-ap="1">${/^permiso_/.test(s.tipo)?"Conceder":"Aprobar"}</button><button type="button" class="btn btn-ghost" data-rsol="${esc(s.id)}" data-ap="0">Rechazar</button></span>`:`<span class="note-sm">Esperando aprobación</span>`}</div>`).join("")}</section>`:""}
     ${REC.edit?recEditor():`<div class="adm-top"><input id="recQ" type="search" placeholder="Buscar receta o ingrediente…" value="${esc(REC.q)}"><button class="btn btn-gold" type="button" id="recNew">+ Nueva receta</button></div>`}
     ${REC.edit?"":L.length?`<div class="rec-list">${L.map(r=>`<article class="rec-c"><div class="rec-c-h"><h4>${esc(r.nombre)}</h4><button type="button" class="linkbtn" data-redit="${esc(r.id)}">Abrir</button></div>
       <p class="note-sm">${r.porciones} ${r.porciones===1?"porción":"porciones"}${r.tiempo?" · "+r.tiempo+" min":""} · ${r.ingredientes.length} ingredientes${REC.rol==="admin"?recChip(r):""}${pend.some(s=>s.receta===r.id)?` · <span class="rec-pend">cambio pendiente</span>`:""}${REC.rol==="chef"&&r.editableHasta>recAhora()?` · <span class="rec-chip ok">editable unos minutos</span>`:""}</p>
@@ -3241,7 +3289,24 @@ document.addEventListener("click",async e=>{
   const t=e.target;
   if(t.id==="recNew"){REC.edit={id:"",nombre:"",porciones:1,ingredientes:[]};recRender();return;}
   const ed=t.closest("[data-redit]");if(ed){REC.edit=JSON.parse(JSON.stringify(REC.lista.find(r=>r.id===ed.dataset.redit)));recRender();$("#recEd").scrollIntoView({behavior:"smooth",block:"start"});return;}
-  if(t.id==="reCancel"){REC.edit=null;recRender();return;}
+  if(t.id==="reCancel"){REC.edit=null;REC.prop=null;recRender();return;}
+  const rp=t.closest("[data-rperm]");if(rp){rp.disabled=true;const mot=$("#rpMot")?$("#rpMot").value:"";
+    try{const r=await api({accion:"receta_permiso",token:admTok(),id:REC.edit.id,tipo:rp.dataset.rperm,motivo:mot});
+      if(r.ok){const id=REC.edit.id;await recLoad();REC.edit=JSON.parse(JSON.stringify(REC.lista.find(x=>x.id===id)||{}));if(!REC.edit.id)REC.edit=null;recRender();const m=$("#reMsg");if(m)m.textContent="Solicitud enviada. Te aparecerá aquí cuando el administrador la conceda.";}
+      else{rp.disabled=false;$("#reMsg").textContent="No se pudo enviar.";}}catch(_){rp.disabled=false;$("#reMsg").textContent="No se pudo conectar.";}return;}
+  if(t.id==="reEst"){recLeerEd();if(!REC.edit.nombre.trim()){$("#reMsg").textContent="Escribe el nombre de la receta.";return;}if(!REC.edit.ingredientes.length){$("#reMsg").textContent="Agrega o detecta ingredientes primero.";return;}
+    t.disabled=true;t.textContent="La IA está revisando…";const p=recPlatos().find(x=>x.id===REC.edit.plato);
+    try{const r=await api({accion:"receta_estandarizar",token:admTok(),receta:REC.edit,plato:p?p.cat+" · "+p.n+": "+p.d:""});
+      if(r.ok){REC.prop=Object.assign(r.propuesta,{sel:{ing:true,pasos:true,ficha:true,tiempo:true,sug:{}}});recRender();const x=$("#recProp");if(x)x.scrollIntoView({behavior:"smooth",block:"center"});}
+      else{t.disabled=false;t.textContent="✦ Estandarizar con IA";$("#reMsg").textContent=r.error==="cupo"?"Se alcanzó el límite diario de consultas a la IA. Intenta mañana.":r.error==="sin_ia"?"La IA no está configurada (falta GEMINI_KEY).":"La IA no respondió ahora; intenta de nuevo en un momento.";}}
+    catch(_){t.disabled=false;t.textContent="✦ Estandarizar con IA";$("#reMsg").textContent="No se pudo conectar.";}return;}
+  if(t.id==="rpNo"){REC.prop=null;recRender();return;}
+  if(t.id==="rpSi"){recLeerEd();const P=REC.prop,e=REC.edit;document.querySelectorAll("[data-rpsel]").forEach(c=>{const k=c.dataset.rpsel;if(k.startsWith("s"))P.sel.sug[k.slice(1)]=c.checked;else P.sel[k]=c.checked;});
+    if(P.sel.ing)e.ingredientes=P.ingredientes.map(x=>Object.assign({},x));
+    P.sugeridos.forEach((x,i)=>{if(P.sel.sug[i]&&!e.ingredientes.some(y=>norm(y.n)===norm(x.n)))e.ingredientes.push({n:x.n,c:x.c,u:x.u});});
+    if(P.sel.pasos&&P.pasos)e.pasos=P.pasos;if(P.sel.tiempo&&P.tiempo)e.tiempo=P.tiempo;
+    if(P.sel.ficha){e.ficha=Object.assign({},e.ficha||{});Object.entries(P.ficha).forEach(([k,v])=>{if(v)e.ficha[k]=v;});}
+    REC.prop=null;recRender();const m=$("#reMsg");if(m)m.textContent="Propuesta aplicada en el formulario. Revísala y toca «Guardar receta» para que quede.";return;}
   if(t.id==="reAdd"){const tb=$("#reIng");tb.insertAdjacentHTML("beforeend",recFila({n:"",c:0,u:"g"},tb.children.length));tb.querySelector("tr:last-child input").focus();return;}
   const rd=t.closest("[data-rdel]");if(rd){rd.closest("tr").remove();return;}
   if(t.id==="reAuto"){recLeerEd();const p=recPlatos().find(x=>x.id===REC.edit.plato);const nombre=p?p.n:REC.edit.nombre,desc=p?p.d:"",nota=p?p.nota:"";
@@ -3255,8 +3320,8 @@ document.addEventListener("click",async e=>{
       else $("#reMsg").textContent="La IA no respondió ahora; usa la detección automática.";}catch(_){$("#reMsg").textContent="No se pudo conectar.";}t.disabled=false;return;}
   if(t.id==="reSave"){recLeerEd();if(!REC.edit.nombre.trim()){$("#reMsg").textContent="Escribe el nombre de la receta.";return;}t.disabled=true;$("#reMsg").textContent="Guardando…";
     try{const r=await api({accion:"receta_guardar",token:admTok(),receta:REC.edit});
-      if(r.ok){const nueva=!REC.edit.id;REC.edit=null;await recLoad();$("#recOut").insertAdjacentHTML("afterbegin",`<div class="welcome">${r.pendiente?"Cambios enviados. El administrador debe aprobarlos.":nueva&&REC.rol==="chef"?"Receta guardada. Durante 5 minutos puedes corregirla o borrarla sin aprobación; después, cualquier cambio pasa por el administrador.":"Receta guardada."}</div>`);if(FI.sel)fiRender();}
-      else{$("#reMsg").textContent=r.error==="sesion"?"La sesión expiró.":"No se pudo guardar.";t.disabled=false;}}catch(_){$("#reMsg").textContent="No se pudo conectar.";t.disabled=false;}return;}
+      if(r.ok){const nueva=!REC.edit.id;REC.edit=null;REC.prop=null;await recLoad();$("#recOut").insertAdjacentHTML("afterbegin",`<div class="welcome">${r.pendiente?"Cambios enviados. El administrador debe aprobarlos.":nueva&&REC.rol==="chef"?"Receta guardada. Durante 5 minutos puedes corregirla o borrarla sin aprobación; después, cualquier cambio pasa por el administrador.":"Receta guardada."}</div>`);if(FI.sel)fiRender();}
+      else{$("#reMsg").textContent=r.error==="sesion"?"La sesión expiró.":r.error==="sin_permiso"?"El permiso de edición ya venció. Pide uno nuevo al administrador.":"No se pudo guardar.";t.disabled=false;}}catch(_){$("#reMsg").textContent="No se pudo conectar.";t.disabled=false;}return;}
   if(t.id==="reDel"){if(t.dataset.c!=="1"){t.dataset.c="1";t.textContent="¿Seguro? Toca otra vez";return;}
     try{const r=await api({accion:"receta_borrar",token:admTok(),id:REC.edit.id});if(r.ok){REC.edit=null;await recLoad();$("#recOut").insertAdjacentHTML("afterbegin",`<div class="welcome">${r.pendiente?"Solicitud de eliminación enviada al administrador.":"Receta eliminada."}</div>`);}}catch(_){}return;}
   const so=t.closest("[data-rsol]");if(so){so.disabled=true;try{const r=await api({accion:"receta_resolver",token:admTok(),id:so.dataset.rsol,aprobar:so.dataset.ap==="1"});if(r.ok)recLoad();}catch(_){so.disabled=false;}return;}
@@ -3564,7 +3629,7 @@ async function vnSubir(){
       nu+=r.nuevas;rep+=r.repetidas;tot+=r.total;}
     catch(_){m.textContent="Se perdió la conexión. Vuelve a cargar el archivo: lo que ya entró no se duplica.";b.disabled=false;return;}}
   $("#vnMap").innerHTML=`<div class="welcome">Listo: ${nu} ventas nuevas cargadas${rep?` · ${rep} ya estaban y se ignoraron`:""} · ${colones(Math.round(tot))}. Ya aparecen en el Tablero.</div>`;
-  CUBE=null;vnCargas();
+  CUBE=null;vnCargas();meLoad();
 }
 async function vnCargas(){
   try{const r=await api({accion:"admin_ventas_cargas",token:admTok()});if(!r.ok)return;
@@ -3587,7 +3652,7 @@ document.addEventListener("click",async e=>{
 
 
 /* --- Aviso si el Apps Script publicado no es la versión más reciente --- */
-const VERSION_GS="2026-11-13";
+const VERSION_GS="2026-11-14";
 async function verCheck(){
   let v="";try{const r=await api({accion:"version"});v=r&&r.ok?r.version:"";}catch(_){return;}
   const old=$("#aVer");if(old)old.remove();if(v===VERSION_GS)return;
@@ -3607,7 +3672,7 @@ function fiRender(){
   const blk=(t,v)=>v?`<div class="fi-blk"><h5>${t}</h5><p>${esc(v).replace(/\n/g,"<br>")}</p></div>`:"";
   o.innerHTML=`<div class="fi-bar"><label class="ci-pick">Receta<select id="fiSel">${L.map(x=>`<option value="${esc(x.id)}" ${x.id===FI.sel?"selected":""}>${esc(x.nombre)}</option>`).join("")}</select></label>
     <label class="ci-pick">Porciones<input id="fiPor" type="number" min="1" max="500" value="${por}"></label>
-    <span class="fi-act"><button type="button" class="btn btn-ghost" id="fiEdit">Editar receta</button><button type="button" class="btn btn-gold" id="fiPrint">Imprimir ficha</button></span></div>
+    <span class="fi-act"><button type="button" class="btn btn-ghost" id="fiEdit">${recLibre(r)?"Editar / completar con IA":"Ver y pedir permiso"}</button><button type="button" class="btn btn-gold" id="fiPrint">Imprimir ficha</button></span></div>
   <article class="fi-sheet" id="fiSheet">
     <header class="fi-h"><div><span class="mono">Nostro Caffè · Ficha técnica</span><h3>${esc(r.nombre)}</h3><p>${pl?esc(pl.cat)+" · "+esc(pl.n):"Receta independiente"} · Código ${esc(r.id)}</p></div>${foto?`<img src="${esc(foto)}" alt="">`:""}</header>
     <div class="fi-meta"><div><span>Rinde</span><b>${por} ${por===1?"porción":"porciones"}</b></div><div><span>Tiempo</span><b>${r.tiempo?r.tiempo+" min":"—"}</b></div><div><span>Ingredientes</span><b>${r.ingredientes.length}</b></div>${cost&&cost.total?`<div><span>Costo por porción</span><b>${colones(Math.round(cost.porcion))}</b></div>${pl&&pl.p?`<div><span>Costo / precio</span><b>${(cost.porcion/pl.p*100).toFixed(0)}%</b></div>`:""}`:""}<div><span>Actualizada</span><b>${esc(String(r.actualizada||r.creada||"").slice(0,10))}</b></div></div>
@@ -3837,6 +3902,43 @@ document.addEventListener("input",e=>{const t=e.target.closest("[data-repx]");if
   const id=t.dataset.repx;REPX._t=setTimeout(()=>{delete REPX._t;ciRender();const b=document.querySelector(`[data-repx="${id}"]`);if(b)b.focus();},600);});
 document.addEventListener("click",e=>{if(e.target.id==="ciGo")ciSubir();});
 
+
+/* --- Ventas por plato: ingeniería de menú + consumo teórico de insumos (cruza ventas, recetas e insumos) --- */
+let ME={dias:30,data:null};
+async function meLoad(){
+  const o=$("#meOut");if(!o)return;o.innerHTML='<p class="note-sm">Analizando ventas por plato…</p>';
+  try{
+    const tasks=[api({accion:"admin_cubo",token:admTok(),dias:ME.dias})];
+    if(!REC.lista.length||!INS_OK)tasks.push(Promise.all([api({accion:"recetas_lista",token:admTok()}),api({accion:"insumos_lista",token:admTok()})]).then(([r,ri])=>{if(r.ok){REC.lista=r.recetas||[];REC.sol=r.solicitudes||[];REC.rol=r.rol;}if(ri.ok){INS=ri.insumos||[];INS_OK=true;}}).catch(()=>{}));
+    const [c]=await Promise.all(tasks);if(!c.ok){o.innerHTML="";return;}ME.data=c;meRender();}
+  catch(_){o.innerHTML="";}}
+const ME_CL={estrella:["Estrella","Se vende mucho y deja buen margen: cuídala, no la cambies y ponla a la vista."],caballo:["Caballo de batalla","Se vende mucho pero deja poco: revisa porción o costo, o súbele un poco el precio."],enigma:["Joya escondida","Deja buen margen pero se vende poco: recomiéndala, mejor foto o lugar en la carta."],perro:["Por revisar","Se vende poco y deja poco: replantéala o sácala."]};
+function meRender(){
+  const o=$("#meOut"),D=ME.data.dic,P={};let dias=new Set();
+  ME.data.hechos.forEach(f=>{if(D[f[1]]!=="venta"||!D[f[3]])return;const n=platoNombre(D[f[3]]);const p=P[n]=P[n]||{n,u:0,v:0,raw:D[f[3]]};p.u+=f[9]||1;p.v+=f[7]||0;dias.add(new Date((f[0]-21600)*1000).toISOString().slice(0,10));});
+  const L=Object.values(P).sort((a,b)=>b.u-a.u),nd=Math.max(1,dias.size),C=v=>colones(Math.round(v));
+  const head=`<div class="vn-card"><div class="vn-head"><div><span class="mono">Platos · recetas · insumos</span><h2>Ventas por plato</h2></div><label class="ci-pick">Periodo<select id="meDias">${[[7,"7 días"],[30,"30 días"],[60,"60 días"],[90,"90 días"]].map(([v,l])=>`<option value="${v}" ${v===ME.dias?"selected":""}>${l}</option>`).join("")}</select></label></div>`;
+  if(!L.length){o.innerHTML=head+`<p class="adm-help">Aquí se cruzan las ventas por plato con las recetas y los insumos: qué platos te dejan más (ingeniería de menú), tu costo de comida real y cuánto de cada insumo se gastó y para cuántos días te alcanza.</p>
+    <p class="note-sm"><b>Falta el reporte por producto.</b> El cierre de facturas no trae los platos. En MOZZO exporta el reporte de <b>ventas por producto</b> (o "productos vendidos") en Excel y súbelo arriba, en este mismo recuadro de carga: el panel reconoce las columnas de fecha, producto, cantidad y total.</p></div>`;return;}
+  L.forEach(p=>{const pm=platoMenu(p.raw);p.id=pm?pm.id:"";p.rec=p.id?REC.lista.find(r=>r.plato===p.id):null;p.precio=p.u?p.v/p.u:0;
+    if(p.rec&&INS_OK){const k=costoReceta(p.rec);if(k.total&&!k.falt.length){p.costo=k.porcion;p.mu=p.precio-p.costo;}else p.falta=k.total?"precios":"precios";}else p.falta=p.id?"receta":"menú";});
+  const con=L.filter(p=>p.costo!=null),U=con.reduce((a,p)=>a+p.u,0),pop=U?0.7/con.length:0,mAvg=U?con.reduce((a,p)=>a+p.mu*p.u,0)/U:0;
+  con.forEach(p=>{const hp=p.u/U>=pop,hm=p.mu>=mAvg;p.cl=hp&&hm?"estrella":hp?"caballo":hm?"enigma":"perro";});
+  const vTot=L.reduce((a,p)=>a+p.v,0),cTot=con.reduce((a,p)=>a+p.costo*p.u,0),vCon=con.reduce((a,p)=>a+p.v,0);
+  // consumo teórico
+  const cons={};con.concat(L.filter(p=>p.rec&&p.costo==null)).forEach(p=>{const r=p.rec;if(!r)return;const k=p.u/(r.porciones||1);
+    r.ingredientes.forEach(i=>{if(!i.c)return;const b=U_BASE[i.u]||["g",1],x=insDe(i.n),key=x?x.nombre:i.n,un=x?x.unidad:b[0];if(x&&x.unidad!==b[0])return;const q=cons[key]=cons[key]||{n:key,un,q:0,ins:x};q.q+=i.c*b[1]*k;});});
+  const CL=Object.values(cons).map(q=>{q.dia=q.q/nd;q.cob=q.ins&&q.ins.stock!=null&&q.dia?q.ins.stock/q.dia:null;return q;}).sort((a,b)=>(a.cob==null)-(b.cob==null)||(a.cob||0)-(b.cob||0)||b.q-a.q);
+  const fmtQ=(q,u)=>u==="g"&&q>=1000?(q/1000).toFixed(1)+" kg":u==="ml"&&q>=1000?(q/1000).toFixed(1)+" l":Math.round(q)+" "+u;
+  const sinCosto=L.filter(p=>p.costo==null);
+  o.innerHTML=head+`<div class="vn-sum"><div><span>Platos vendidos</span><b>${L.reduce((a,p)=>a+p.u,0)}</b></div><div><span>Venta</span><b>${C(vTot)}</b></div><div><span>Platos con costo</span><b>${con.length} de ${L.length}</b></div><div><span>Costo de comida</span><b>${vCon?(cTot/vCon*100).toFixed(0)+"%":"—"}</b></div><div><span>Margen promedio</span><b>${con.length?C(mAvg):"—"}</b></div></div>
+    ${con.length?`<div class="me-q">${Object.entries(ME_CL).map(([k,[t,d]])=>{const xs=con.filter(p=>p.cl===k);return `<div class="me-c ${k}"><b>${t} <small>${xs.length}</small></b><p>${d}</p><span>${xs.slice(0,6).map(p=>esc(p.n)).join(" · ")||"—"}</span></div>`;}).join("")}</div>`:`<p class="note-sm">Para clasificar los platos hace falta su costo: crea la receta de cada plato (ligada al plato del menú) y anota los precios en Insumos.</p>`}
+    <div class="hm-wrap"><table class="vn-prev me-t"><thead><tr><th>Plato</th><th>Vendidos</th><th>Venta</th><th>Precio prom.</th><th>Costo</th><th>Margen c/u</th><th>Margen total</th><th></th></tr></thead><tbody>${L.slice(0,60).map(p=>`<tr><td>${esc(p.n)}</td><td>${p.u}</td><td>${C(p.v)}</td><td>${C(p.precio)}</td><td>${p.costo!=null?C(p.costo)+` <small>${(p.costo/p.precio*100).toFixed(0)}%</small>`:`<small class="me-f">sin ${p.falta}</small>`}</td><td>${p.mu!=null?C(p.mu):"—"}</td><td>${p.mu!=null?C(p.mu*p.u):"—"}</td><td>${p.cl?`<span class="me-chip ${p.cl}">${ME_CL[p.cl][0]}</span>`:""}</td></tr>`).join("")}</tbody></table></div>
+    ${sinCosto.length?`<p class="note-sm">Sin costo: ${sinCosto.slice(0,10).map(p=>esc(p.n)+" ("+(p.falta==="menú"?"no coincide con el menú":p.falta==="receta"?"sin receta":"faltan precios de insumos")+")").join(", ")}${sinCosto.length>10?"…":""}.</p>`:""}
+    <h4 class="vn-h4">Consumo teórico de insumos <small>según ventas × recetas, ${nd} ${nd===1?"día":"días"} con ventas</small></h4>
+    ${CL.length?`<div class="hm-wrap"><table class="vn-prev"><thead><tr><th>Insumo</th><th>Gastado en el periodo</th><th>Por día</th><th>Stock actual</th><th>Alcanza para</th></tr></thead><tbody>${CL.slice(0,40).map(q=>`<tr class="${q.cob!=null&&q.cob<4?"bajo":""}"><td>${esc(q.n)}</td><td>${fmtQ(q.q,q.un)}</td><td>${fmtQ(q.dia,q.un)}</td><td>${q.ins&&q.ins.stock!=null?fmtQ(q.ins.stock,q.un):"—"}</td><td>${q.cob!=null?(q.cob<1?"menos de 1 día":Math.floor(q.cob)+" días"):"—"}</td></tr>`).join("")}</tbody></table></div>
+      <p class="note-sm">Es lo que <i>debería</i> haberse gastado según las recetas. Si al contar el inventario real se gastó bastante más, hay merma, porciones grandes o desperdicio.</p>`:`<p class="note-sm">Cuando los platos vendidos tengan receta, aquí verás cuánto se gastó de cada insumo y para cuántos días te alcanza el stock.</p>`}</div>`;}
+document.addEventListener("change",e=>{if(e.target.id==="meDias"){ME.dias=+e.target.value;meLoad();}});
 /* nombres de platos: une el nombre del punto de venta con el del menú */
 var PLATO_IDX=null;
 function platoIdx(){if(PLATO_IDX)return PLATO_IDX;PLATO_IDX=[];["cocina","bebidas"].forEach(w=>MENU[w].forEach(c=>c.items.forEach(it=>PLATO_IDX.push({k:norm(it[0]).replace(/[^a-z0-9ñ ]/g,"").replace(/\s+/g," ").trim(),n:it[0],cat:c.cat,id:keyOf(c,it)}))));return PLATO_IDX;}
@@ -4231,9 +4333,11 @@ function nmDesc(a){
   }
   return esc(a.tipo||"Acción");
 }
+function nmCosto(id){try{if(!INS_OK||!REC.lista.length)return undefined;const r=REC.lista.find(k=>k.plato===id);if(!r)return undefined;const k=costoReceta(r);return k.total&&!k.falt.length?Math.round(k.porcion):undefined;}catch(_){return undefined;}}
 function nmValid(a){
   if(["plato_del_dia","rush_platos"].includes(a.tipo))return (a.ids||[]).some(admById);
-  if(["plato_editar","plato_activar"].includes(a.tipo))return !!admById(a.id);
+  if(a.tipo==="plato_editar"){if(!admById(a.id))return false;if(a.precio){const f=findByKey(a.id),n=parsePrice(a.precio),o=f?parsePrice(String(f.it[1])):0;if(!n||n<500||n>30000||(o&&Math.abs(n-o)/o>.2))return false;}return true;}
+  if(a.tipo==="plato_activar")return !!admById(a.id);
   if(a.tipo==="plato_nuevo")return !!(a.nombre&&parsePrice(a.precio)&&a.cat);
   if(a.tipo==="rush_modo")return ["apagado","encendido","automatico"].includes(a.modo);
   if(a.tipo==="promo_crear")return !!a.titulo;
@@ -4275,7 +4379,7 @@ async function nmSend(txt){
   txt=String(txt||"").trim();if(!txt)return;
   NM.push({rol:"admin",texto:txt});NM.push({rol:"nostromo",texto:"Pensando…",pend:true});nmSave();nmRender();
   $("#nmIn").value="";$("#nmSend").disabled=true;
-  const menu=admItems.map(x=>{const f=findByKey(x.id);return{id:x.id,n:x.nombre,cat:x.cat,w:x.w,precio:f?priceToText(f.it[1]):"",desc:(f&&f.it[2]||"").slice(0,140),activo:x.activo,rush:x.rush,lento:x.lento,delDia:isDay(x),fotos:fotosDe(x.id).length,horas:x.horas||"",dias:x.dias||""};});
+  const menu=admItems.map(x=>{const f=findByKey(x.id);return{id:x.id,n:x.nombre,cat:x.cat,w:x.w,precio:f?priceToText(f.it[1]):"",costo:nmCosto(x.id),desc:(f&&f.it[2]||"").slice(0,140),activo:x.activo,rush:x.rush,lento:x.lento,delDia:isDay(x),fotos:fotosDe(x.id).length,horas:x.horas||"",dias:x.dias||""};});
   const n=nowCR();
   const contexto={tablero:TB_LAST,menu,ahora:DIA_NOMBRE[n.dow]+" "+hoyCR()+" "+fmtH(n.min),horario:Object.fromEntries([0,1,2,3,4,5,6].map(d=>[DIA_NOMBRE[d],admHours[d]||HORARIO[d]||"cerrado"])),rushModo:admRush.modo,promos:admPromos.map(p=>({titulo:p.titulo,dias:p.dias,horas:p.horas,activa:p.activa}))};
   const msgs=NM.filter(m=>!m.pend&&!m.error).map(m=>({rol:m.rol,texto:m.rol==="nostromo"&&(m.acciones||[]).length?m.texto+"\n[Acciones propuestas: "+m.acciones.map(a=>a.tipo+(a.hecho?" (aplicada)":"")).join(", ")+"]":m.texto}));
