@@ -740,8 +740,8 @@ button.btn-ghost{background:transparent}
 /* =====================================================================
    CAPA PREMIUM · menos cajas, más aire, líneas finas
    ===================================================================== */
-:root{--ink:#0a1a12;--ink-2:#0c2018;--hair:rgba(197,160,89,.28);--hair-soft:rgba(233,220,195,.12);--matte:#c5a059}
-body{background:linear-gradient(180deg,#0a1a12 0%,#08150f 50%,#0a1a12 100%)!important}
+:root{--ink:#0e2219;--ink-2:#10261c;--hair:rgba(197,160,89,.28);--hair-soft:rgba(233,220,195,.12);--matte:#c5a059}
+body{background:linear-gradient(180deg,#0e2219 0%,#0b1d15 50%,#0e2219 100%)!important}
 /* sin resplandores */
 .emblem{filter:none!important;animation:none}
 .word{text-shadow:none!important;animation:none!important;background:none!important;-webkit-text-fill-color:var(--gold-hi);color:var(--gold-hi)!important;-webkit-text-stroke:0!important}
@@ -938,10 +938,10 @@ h2{font-weight:400;letter-spacing:.01em}
 #intro.out{opacity:0;visibility:hidden}
 .in-stage{display:grid;place-items:center;width:min(94vw,980px)}
 .in-sig,.in-logo{grid-area:1/1}
-.in-sig{position:relative;font-family:"NostroFirma","Brush Script MT",cursive;font-weight:400;font-size:clamp(7.5rem,32vw,19rem);line-height:1.2;padding:.05em .4em .15em;white-space:nowrap;
+.in-sig{position:relative;font-family:"NostroFirma","Brush Script MT",cursive;font-weight:400;font-size:clamp(6rem,30vw,19rem);line-height:1.2;padding:.05em .45em .15em;white-space:nowrap;
   -webkit-mask-image:linear-gradient(90deg,#000 44%,transparent 56%);mask-image:linear-gradient(90deg,#000 44%,transparent 56%);
   -webkit-mask-size:260% 100%;mask-size:260% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:100% 0;mask-position:100% 0}
-.in-sig span{background:linear-gradient(100deg,#8f6d2c 0%,#ecd08f 38%,#c9a24a 58%,#f7e6b5 78%,#b8954a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(236,208,143,.18))}
+.in-sig span{display:inline-block;padding:.08em .32em .12em .34em;margin:-.08em -.32em -.12em -.34em;background:linear-gradient(100deg,#8f6d2c 0%,#ecd08f 38%,#c9a24a 58%,#f7e6b5 78%,#b8954a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(236,208,143,.18))}
 .in-fl{position:absolute;left:4%;right:2%;bottom:6%;width:94%;height:18%;overflow:visible}
 .in-fl path{fill:none;stroke:#d9b766;stroke-width:2.2;stroke-linecap:round;stroke-dasharray:640;stroke-dashoffset:640}
 .in-logo{display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0}
@@ -1453,7 +1453,7 @@ body.intro-on{overflow:hidden}
 .rv-est button[aria-pressed=true][data-rvest="llegó"]{border-color:#5fd3a7;color:#5fd3a7;background:rgba(95,211,167,.1)}
 .rv-est button[aria-pressed=true][data-rvest="no llegó"]{border-color:var(--crimson-hi);color:#ff9aa6;background:rgba(176,24,47,.15)}
 /* ===== RECETAS ===== */
-.rol-chef .adm-tabs [data-tab]:not([data-tab=recetas]),.rol-chef #aUrg,.rol-chef #aAsis,.rol-chef .adm-save{display:none!important}
+.rol-chef .adm-tabs [data-tab]:not([data-tab=recetas]):not([data-tab=ficha]),.rol-chef #aUrg,.rol-chef #aAsis,.rol-chef .adm-save{display:none!important}
 .rec-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 .rec-c{border:1px solid rgba(233,220,195,.14);background:rgba(7,9,8,.4);padding:14px 16px}
 .rec-c-h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.rec-c h4{margin:0;font-family:var(--f-display);font-weight:400;font-size:1.35rem;color:var(--beige)}
@@ -1527,6 +1527,21 @@ body.intro-on{overflow:hidden}
 .eq-metas{list-style:none;margin:0;padding:0;display:grid;gap:4px}.eq-metas li{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed rgba(233,220,195,.08)}.eq-metas label{display:flex;gap:8px;align-items:center}
 .eq-metas input:checked+span{text-decoration:line-through;color:var(--beige-dim)}
 .eq-b .adm-top{display:flex;gap:10px;flex-wrap:wrap}.eq-b .adm-top input{flex:1;min-width:220px;background:rgba(7,9,8,.6);border:1px solid rgba(233,220,195,.18);color:var(--beige);padding:10px 12px;font:inherit;font-size:.9rem}
+
+.adm-ver{margin:0 0 14px;padding:12px 14px;border:1px solid rgba(192,69,60,.5);background:rgba(192,69,60,.1);color:var(--beige-dim);font-size:.88rem;line-height:1.5}.adm-ver b{color:var(--beige)}.adm-ver code{color:var(--gold,#c9a25c)}
+.rec-ok{color:#7fc79a}
+.rec-fi{border:1px solid rgba(233,220,195,.14);padding:12px 14px 14px;margin:0;display:grid;gap:10px}.rec-fi legend{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold,#c9a25c);padding:0 6px}
+.rec-g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:700px){.rec-g2{grid-template-columns:1fr}}
+.fi-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:16px}.fi-bar #fiPor{width:90px}.fi-act{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.fi-sheet{background:#f6f0e4;color:#1b1a17;padding:28px 30px;display:grid;gap:18px;font-size:.92rem}
+.fi-h{display:flex;justify-content:space-between;gap:18px;border-bottom:2px solid #0b3d2f;padding-bottom:14px}.fi-h .mono{color:#8a6d36;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase}.fi-h h3{margin:4px 0;font-family:var(--f-display,serif);font-size:1.9rem;color:#0b3d2f;font-weight:400}.fi-h p{margin:0;color:#5b574e;font-size:.84rem}.fi-h img{width:120px;height:90px;object-fit:cover}
+.fi-meta{display:flex;flex-wrap:wrap;gap:0;border:1px solid #d8ccb4}.fi-meta div{padding:8px 14px;border-right:1px solid #d8ccb4;flex:1;min-width:110px}.fi-meta span{display:block;font-family:var(--f-mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:#8a6d36}.fi-meta b{font-size:1rem;color:#1b1a17}
+.fi-t{width:100%;border-collapse:collapse}.fi-t th{text-align:left;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:#8a6d36;border-bottom:1px solid #0b3d2f;padding:6px 8px}.fi-t td{padding:6px 8px;border-bottom:1px solid #e3d9c6}.fi-t td:nth-child(n+2){font-variant-numeric:tabular-nums}
+.fi-blk h5{margin:0 0 6px;font-family:var(--f-mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#0b3d2f}.fi-blk p{margin:0;line-height:1.5}.fi-blk ol{margin:0;padding-left:20px;display:grid;gap:4px;line-height:1.5}
+.fi-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px}@media (max-width:700px){.fi-grid{grid-template-columns:1fr}.fi-sheet{padding:18px}}
+.fi-hint{color:#8a6d36!important}
+@media print{body.print-ficha *{visibility:hidden!important}body.print-ficha #fiSheet,body.print-ficha #fiSheet *{visibility:visible!important}body.print-ficha #fiSheet{position:absolute;left:0;top:0;width:100%;padding:0;background:#fff}body.print-ficha{background:#fff!important}body.print-ficha .fi-hint{display:none}}
+.ci-pick select,.ci-pick input{background:rgba(7,9,8,.6);border:1px solid rgba(233,220,195,.2);color:var(--beige);padding:8px 10px;font:inherit;font-size:.88rem;letter-spacing:0;text-transform:none}.ci-pick select option{background:#0b1612}
 </style>
 
 <div id="intro" aria-hidden="true">
@@ -2010,6 +2025,7 @@ body.intro-on{overflow:hidden}
         <button type="button" role="tab" data-tab="reservas" aria-selected="true">Reservas</button>
         <button type="button" role="tab" data-tab="platos" aria-selected="false">Platos</button>
         <button type="button" role="tab" data-tab="recetas" aria-selected="false">Recetas</button>
+        <button type="button" role="tab" data-tab="ficha" aria-selected="false">Ficha técnica</button>
         <button type="button" role="tab" data-tab="cats" aria-selected="false">Categorías</button>
         <button type="button" role="tab" data-tab="horario" aria-selected="false">Horario</button>
         <button type="button" role="tab" data-tab="socios" aria-selected="false">Socios</button>
@@ -2080,6 +2096,10 @@ body.intro-on{overflow:hidden}
       <div class="adm-sec" data-sec="recetas" hidden>
         <div class="vn-head"><div><span class="mono">Cocina</span><h2>Recetas</h2><p class="adm-help">Cada receta guarda sus ingredientes con cantidades por porción, la preparación y notas. El desglose se arma solo a partir del plato y tú lo corriges.</p></div></div>
         <div id="recOut"></div>
+      </div>
+      <div class="adm-sec" data-sec="ficha" hidden>
+        <div class="vn-head"><div><span class="mono">Cocina</span><h2>Ficha técnica</h2><p class="adm-help">La hoja estándar de cada receta: cantidades escaladas a las porciones que necesites, preparación, montaje, conservación y alérgenos. Lista para imprimir y dejar en cocina.</p></div></div>
+        <div id="fiOut"></div>
       </div>
       <div class="adm-sec" data-sec="ventas" hidden>
         <div class="vn-head"><div><span class="mono">Punto de venta</span><h2>Cargar ventas</h2>
@@ -3034,19 +3054,20 @@ $("#aFilter").addEventListener("input",admRender);
 document.querySelectorAll(".adm-tabs [data-tab]").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".adm-tabs [data-tab]").forEach(x=>x.setAttribute("aria-selected",x===b));
   document.querySelectorAll(".adm-sec").forEach(s=>s.hidden=s.dataset.sec!==b.dataset.tab);
-  $(".adm-save").hidden=["socios","stats","reservas","cats","ventas","recetas","equipo"].includes(b.dataset.tab);
+  $(".adm-save").hidden=["socios","stats","reservas","cats","ventas","recetas","equipo","ficha"].includes(b.dataset.tab);
   if(b.dataset.tab==="cats")admRenderCats();
   if(b.dataset.tab==="reservas")rvLoad();
   if(b.dataset.tab==="stats")tbLoad();
   if(b.dataset.tab==="ventas"){vnCargas();ciLoad();}
   if(b.dataset.tab==="recetas")recLoad();
+  if(b.dataset.tab==="ficha")fiLoad();
   if(b.dataset.tab==="equipo")eqLoad(true);
   if(b.dataset.tab==="socios")fidLoad();
 });
 async function admLoad(){
   const t=admTok();if(!t){admShow(false);return;}
   admShow(true);
-  const chef=admRol()==="chef";document.body.classList.toggle("rol-chef",chef);
+  const chef=admRol()==="chef";document.body.classList.toggle("rol-chef",chef);verCheck();
   if(chef){document.querySelectorAll(".adm-tabs [data-tab]").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab==="recetas"));document.querySelectorAll(".adm-sec").forEach(x=>x.hidden=x.dataset.sec!=="recetas");$(".adm-save").hidden=true;recLoad();return;}
   $("#aMsg").textContent="Cargando…";
   try{const r=await api({accion:"admin_menu",token:t});
@@ -3055,7 +3076,7 @@ async function admLoad(){
     if(r.aviso)AVISO=r.aviso;urgRender();renderChips();renderBoard();
     admPromos=(r.promos||[]).map(p=>Object.assign({},p));if(r.ajustesRush)admRush=r.ajustesRush;admRushEstado=r.rush||null;
     admBuild(r.items,r.horario);admRenderPromos();admRenderRush();$("#aMsg").textContent="";avisosStart();
-    const tab=document.querySelector('.adm-tabs [aria-selected="true"]');$(".adm-save").hidden=["socios","stats","reservas","cats","ventas","recetas","equipo"].includes(tab&&tab.dataset.tab);if(tab&&tab.dataset.tab==="reservas")rvLoad();}
+    const tab=document.querySelector('.adm-tabs [aria-selected="true"]');$(".adm-save").hidden=["socios","stats","reservas","cats","ventas","recetas","equipo","ficha"].includes(tab&&tab.dataset.tab);if(tab&&tab.dataset.tab==="reservas")rvLoad();}
   catch(_){$("#aMsg").textContent="No se pudo cargar. Revisa tu conexión.";}
 }
 $("#aLogin").addEventListener("submit",async e=>{
@@ -3162,14 +3183,16 @@ async function recLoad(){
   $("#recOut").innerHTML='<p class="note-sm">Cargando recetas…</p>';
   try{const [r,ri]=await Promise.all([api({accion:"recetas_lista",token:admTok()}),api({accion:"insumos_lista",token:admTok()}).catch(()=>({ok:false}))]);
     if(!r.ok){$("#recOut").innerHTML=`<p class="note-sm">${r.error==="sesion"?"La sesión expiró. Ingresa de nuevo.":"No se pudieron cargar. ¿Actualizaste el Apps Script?"}</p>`;return;}
-    REC.lista=r.recetas||[];REC.sol=r.solicitudes||[];REC.rol=r.rol;REC.chef=r.chef||null;INS=ri.ok?(ri.insumos||[]):[];INS_OK=!!ri.ok;recRender();}
+    REC.lista=r.recetas||[];REC.sol=r.solicitudes||[];REC.rol=r.rol;REC.desfase=r.ahora?r.ahora-Date.now():0;REC.chef=r.chef||null;INS=ri.ok?(ri.insumos||[]):[];INS_OK=!!ri.ok;recRender();}
   catch(_){$("#recOut").innerHTML='<p class="note-sm">No se pudo conectar.</p>';}
 }
 const U_OPC=["g","kg","ml","l","u","oz","cda","cdta","taza","pizca","rebanada","porción"];
 function recPlatos(){const o=[];["cocina","bebidas"].forEach(w=>MENU[w].forEach(c=>c.items.forEach(it=>o.push({id:keyOf(c,it),n:it[0],d:it[2]||"",nota:c.note||"",cat:c.cat,p:+it[1]||0}))));return o;}
+const recLibre=e=>REC.rol!=="chef"||!e.id||(e.editableHasta&&e.editableHasta>recAhora());
+const recAhora=()=>Date.now()+(REC.desfase||0);
 function recEditor(){
-  const e=REC.edit,pl=recPlatos();
-  return `<div class="rec-ed" id="recEd"><div class="rec-ed-h"><h4>${e.id?"Editar receta":"Nueva receta"}</h4>${e.id&&REC.rol==="chef"?`<span class="note-sm">Tus cambios se enviarán al administrador para aprobación.</span>`:""}</div>
+  const e=REC.edit,pl=recPlatos(),libre=recLibre(e),fi=e.ficha||{};
+  return `<div class="rec-ed" id="recEd"><div class="rec-ed-h"><h4>${e.id?"Editar receta":"Nueva receta"}</h4>${REC.rol==="chef"&&e.id?(libre?`<span class="note-sm rec-ok">Puedes corregirla o borrarla directamente hasta las ${new Date(e.editableHasta-(REC.desfase||0)).toLocaleTimeString("es-CR",{hour:"numeric",minute:"2-digit"})} (5 minutos después de crearla).</span>`:`<span class="note-sm">Ya pasaron los 5 minutos: tus cambios se enviarán al administrador para aprobación.</span>`):""}</div>
     <div class="rec-g"><label class="dm-f">Plato del menú (opcional)<select id="reP"><option value="">— Receta independiente —</option>${pl.map(p=>`<option value="${esc(p.id)}" ${p.id===e.plato?"selected":""}>${esc(p.cat)} · ${esc(p.n)}</option>`).join("")}</select></label>
       <label class="dm-f">Nombre de la receta<input id="reN" maxlength="90" value="${esc(e.nombre||"")}"></label>
       <label class="dm-f">Porciones<input id="rePo" type="number" min="1" max="100" value="${e.porciones||1}"></label>
@@ -3180,11 +3203,19 @@ function recEditor(){
     <button type="button" class="linkbtn" id="reAdd">+ Agregar ingrediente</button>
     ${REC.rol==="admin"?`<div class="rec-cost" id="reCost">${recCostoHtml(e)}</div>`:""}
     <label class="dm-f">Preparación<textarea id="reS" rows="5" maxlength="4000" placeholder="1. …">${esc(e.pasos||"")}</textarea></label>
-    <label class="dm-f">Notas (alergias, montaje, conservación)<textarea id="reNo" rows="2" maxlength="1000">${esc(e.notas||"")}</textarea></label>
-    <div class="urg-act"><button class="btn btn-gold" type="button" id="reSave">${e.id&&REC.rol==="chef"?"Enviar cambios para aprobación":"Guardar receta"}</button><button class="btn btn-ghost" type="button" id="reCancel">Cancelar</button>${e.id?`<button type="button" class="linkbtn danger" id="reDel">${REC.rol==="chef"?"Solicitar eliminación":"Eliminar receta"}</button>`:""}<span class="note-sm" id="reMsg"></span></div></div>`;
+    <label class="dm-f">Notas<textarea id="reNo" rows="2" maxlength="1000">${esc(e.notas||"")}</textarea></label>
+    <fieldset class="rec-fi"><legend>Ficha técnica</legend>
+      <div class="rec-g2"><label class="dm-f">Montaje y presentación<textarea id="fiM" rows="3" maxlength="1200" placeholder="Plato, orden de colocación, decoración…">${esc(fi.montaje||"")}</textarea></label>
+      <label class="dm-f">Utensilios y equipo<textarea id="fiU" rows="3" maxlength="1200" placeholder="Sartén, plancha, aro de 10 cm…">${esc(fi.utensilios||"")}</textarea></label>
+      <label class="dm-f">Conservación<textarea id="fiC" rows="2" maxlength="1200" placeholder="Refrigerar a 4 °C, recipiente cerrado…">${esc(fi.conservacion||"")}</textarea></label>
+      <label class="dm-f">Vida útil<input id="fiV" maxlength="200" value="${esc(fi.vida||"")}" placeholder="Ej.: 3 días refrigerado"></label>
+      <label class="dm-f">Alérgenos<input id="fiA" maxlength="300" value="${esc(fi.alergenos||"")}" placeholder="Gluten, lácteos, huevo…"></label>
+      <label class="dm-f">Puntos críticos de control<input id="fiP" maxlength="600" value="${esc(fi.control||"")}" placeholder="Temperatura interna 74 °C, no recalentar dos veces…"></label></div></fieldset>
+    <div class="urg-act"><button class="btn btn-gold" type="button" id="reSave">${libre?"Guardar receta":"Enviar cambios para aprobación"}</button><button class="btn btn-ghost" type="button" id="reCancel">Cancelar</button>${e.id?`<button type="button" class="linkbtn danger" id="reDel">${libre?"Eliminar receta":"Solicitar eliminación"}</button>`:""}<span class="note-sm" id="reMsg"></span></div></div>`;
 }
 const recFila=(i,k)=>`<tr data-k="${k}"><td><input data-rf="n" value="${esc(i.n||"")}" maxlength="80"></td><td><input data-rf="c" type="number" step="any" min="0" value="${i.c||""}" placeholder="0"></td><td><select data-rf="u">${U_OPC.map(u=>`<option ${u===i.u?"selected":""}>${u}</option>`).join("")}</select></td><td><button type="button" class="linkbtn danger" data-rdel="${k}" aria-label="Quitar">×</button></td></tr>`;
 function recLeerEd(){const e=REC.edit;e.plato=$("#reP").value;e.nombre=$("#reN").value;e.porciones=+$("#rePo").value||1;e.tiempo=+$("#reT").value||"";e.pasos=$("#reS").value;e.notas=$("#reNo").value;
+  e.ficha={montaje:$("#fiM").value,utensilios:$("#fiU").value,conservacion:$("#fiC").value,vida:$("#fiV").value,alergenos:$("#fiA").value,control:$("#fiP").value};
   e.ingredientes=[...document.querySelectorAll("#reIng tr")].map(tr=>({n:tr.querySelector('[data-rf="n"]').value.trim(),c:+tr.querySelector('[data-rf="c"]').value||0,u:tr.querySelector('[data-rf="u"]').value})).filter(i=>i.n);}
 function recRender(){
   const q=norm(REC.q||""),L=REC.lista.filter(r=>!q||norm(r.nombre+" "+r.ingredientes.map(i=>i.n).join(" ")).includes(q));
@@ -3192,7 +3223,7 @@ function recRender(){
   $("#recOut").innerHTML=`${pend.length?`<section class="rec-sol"><h4>${REC.rol==="admin"?"Solicitudes del chef por aprobar":"Tus solicitudes pendientes"} (${pend.length})</h4>${pend.map(s=>`<div class="rec-sol-i"><div><b>${s.tipo==="eliminar"?"Eliminar":"Modificar"}: ${esc(s.nombre)}</b><small>${esc(s.fecha)}${s.tipo==="editar"&&s.datos?" · "+recDiff(s):""}</small></div>${REC.rol==="admin"?`<span><button type="button" class="btn btn-gold" data-rsol="${esc(s.id)}" data-ap="1">Aprobar</button><button type="button" class="btn btn-ghost" data-rsol="${esc(s.id)}" data-ap="0">Rechazar</button></span>`:`<span class="note-sm">Esperando aprobación</span>`}</div>`).join("")}</section>`:""}
     ${REC.edit?recEditor():`<div class="adm-top"><input id="recQ" type="search" placeholder="Buscar receta o ingrediente…" value="${esc(REC.q)}"><button class="btn btn-gold" type="button" id="recNew">+ Nueva receta</button></div>`}
     ${REC.edit?"":L.length?`<div class="rec-list">${L.map(r=>`<article class="rec-c"><div class="rec-c-h"><h4>${esc(r.nombre)}</h4><button type="button" class="linkbtn" data-redit="${esc(r.id)}">Abrir</button></div>
-      <p class="note-sm">${r.porciones} ${r.porciones===1?"porción":"porciones"}${r.tiempo?" · "+r.tiempo+" min":""} · ${r.ingredientes.length} ingredientes${REC.rol==="admin"?recChip(r):""}${pend.some(s=>s.receta===r.id)?` · <span class="rec-pend">cambio pendiente</span>`:""}</p>
+      <p class="note-sm">${r.porciones} ${r.porciones===1?"porción":"porciones"}${r.tiempo?" · "+r.tiempo+" min":""} · ${r.ingredientes.length} ingredientes${REC.rol==="admin"?recChip(r):""}${pend.some(s=>s.receta===r.id)?` · <span class="rec-pend">cambio pendiente</span>`:""}${REC.rol==="chef"&&r.editableHasta>recAhora()?` · <span class="rec-chip ok">editable unos minutos</span>`:""}</p>
       <p class="rec-ings">${r.ingredientes.slice(0,8).map(i=>`${esc(i.n)}${i.c?` <b>${i.c} ${esc(i.u)}</b>`:""}`).join(" · ")}${r.ingredientes.length>8?" …":""}</p></article>`).join("")}</div>`:`<p class="note-sm">${REC.lista.length?"No hay recetas con esa búsqueda.":"Todavía no hay recetas. Crea la primera: elige un plato del menú y toca «Detectar ingredientes»."}</p>`}
     ${REC.edit?"":insHtml()}
     ${REC.rol==="admin"&&!REC.edit?`<details class="rec-chef"><summary>Acceso del chef</summary><p class="note-sm">El chef entra en esta misma página (#admin) con su correo y clave. Solo ve Recetas: puede crear recetas, y sus cambios o eliminaciones te llegan aquí para aprobar. ${REC.chef&&REC.chef.activo?`<b>Acceso activo para ${esc(REC.chef.correo)}.</b>`:"Todavía no tiene acceso."}</p>
@@ -3224,7 +3255,7 @@ document.addEventListener("click",async e=>{
       else $("#reMsg").textContent="La IA no respondió ahora; usa la detección automática.";}catch(_){$("#reMsg").textContent="No se pudo conectar.";}t.disabled=false;return;}
   if(t.id==="reSave"){recLeerEd();if(!REC.edit.nombre.trim()){$("#reMsg").textContent="Escribe el nombre de la receta.";return;}t.disabled=true;$("#reMsg").textContent="Guardando…";
     try{const r=await api({accion:"receta_guardar",token:admTok(),receta:REC.edit});
-      if(r.ok){REC.edit=null;await recLoad();$("#recOut").insertAdjacentHTML("afterbegin",`<div class="welcome">${r.pendiente?"Cambios enviados. El administrador debe aprobarlos.":"Receta guardada."}</div>`);}
+      if(r.ok){const nueva=!REC.edit.id;REC.edit=null;await recLoad();$("#recOut").insertAdjacentHTML("afterbegin",`<div class="welcome">${r.pendiente?"Cambios enviados. El administrador debe aprobarlos.":nueva&&REC.rol==="chef"?"Receta guardada. Durante 5 minutos puedes corregirla o borrarla sin aprobación; después, cualquier cambio pasa por el administrador.":"Receta guardada."}</div>`);if(FI.sel)fiRender();}
       else{$("#reMsg").textContent=r.error==="sesion"?"La sesión expiró.":"No se pudo guardar.";t.disabled=false;}}catch(_){$("#reMsg").textContent="No se pudo conectar.";t.disabled=false;}return;}
   if(t.id==="reDel"){if(t.dataset.c!=="1"){t.dataset.c="1";t.textContent="¿Seguro? Toca otra vez";return;}
     try{const r=await api({accion:"receta_borrar",token:admTok(),id:REC.edit.id});if(r.ok){REC.edit=null;await recLoad();$("#recOut").insertAdjacentHTML("afterbegin",`<div class="welcome">${r.pendiente?"Solicitud de eliminación enviada al administrador.":"Receta eliminada."}</div>`);}}catch(_){}return;}
@@ -3554,6 +3585,42 @@ document.addEventListener("click",async e=>{
 });
 
 
+
+/* --- Aviso si el Apps Script publicado no es la versión más reciente --- */
+const VERSION_GS="2026-11-13";
+async function verCheck(){
+  let v="";try{const r=await api({accion:"version"});v=r&&r.ok?r.version:"";}catch(_){return;}
+  const old=$("#aVer");if(old)old.remove();if(v===VERSION_GS)return;
+  $(".adm-tabs").insertAdjacentHTML("beforebegin",`<div class="adm-ver" id="aVer"><b>${admRol()==="chef"?"El panel todavía no está actualizado.":"El Apps Script publicado es una versión anterior"}</b>${admRol()==="chef"?" Avísale al administrador.":` — por eso no se guardan las facturas, no salen los cupones automáticos ni funciona el acceso del chef. Para arreglarlo: en Apps Script pega el código nuevo, guarda, ejecuta <code>configurar</code> y <code>activarAutomatizaciones</code>, y luego <b>Implementar → Administrar implementaciones → lápiz ✎ → Versión: «Nueva versión» → Implementar</b>. No uses «Nueva implementación» (cambia el enlace).`}</div>`);}
+
+/* --- Ficha técnica: hoja estandarizada por receta (para cocina; se imprime) --- */
+let FI={sel:"",por:0};
+async function fiLoad(){if(!REC.lista.length){$("#fiOut").innerHTML='<p class="note-sm">Cargando fichas…</p>';await recLoad();}fiRender();}
+const fiNum=v=>{const r=Math.round(v*100)/100;return r.toLocaleString("es-CR");};
+function fiRender(){
+  const o=$("#fiOut");if(!o)return;const L=REC.lista.slice().sort((a,b)=>a.nombre.localeCompare(b.nombre));
+  if(!L.length){o.innerHTML='<p class="note-sm">Todavía no hay recetas. Créalas en la pestaña Recetas; cada una tiene su ficha técnica.</p>';return;}
+  if(!FI.sel||!L.find(r=>r.id===FI.sel))FI.sel=L[0].id;
+  const r=L.find(x=>x.id===FI.sel),fi=r.ficha||{},por=FI.por||r.porciones,k=por/(r.porciones||1),pl=recPlatos().find(p=>p.id===r.plato),adm=REC.rol==="admin";
+  const foto=pl?fotosDe(pl.id)[0]:"",cost=adm&&INS_OK?costoReceta(r):null;
+  const pasos=String(r.pasos||"").split(/\n+/).map(x=>x.replace(/^\s*\d+[.)-]\s*/,"").trim()).filter(Boolean);
+  const blk=(t,v)=>v?`<div class="fi-blk"><h5>${t}</h5><p>${esc(v).replace(/\n/g,"<br>")}</p></div>`:"";
+  o.innerHTML=`<div class="fi-bar"><label class="ci-pick">Receta<select id="fiSel">${L.map(x=>`<option value="${esc(x.id)}" ${x.id===FI.sel?"selected":""}>${esc(x.nombre)}</option>`).join("")}</select></label>
+    <label class="ci-pick">Porciones<input id="fiPor" type="number" min="1" max="500" value="${por}"></label>
+    <span class="fi-act"><button type="button" class="btn btn-ghost" id="fiEdit">Editar receta</button><button type="button" class="btn btn-gold" id="fiPrint">Imprimir ficha</button></span></div>
+  <article class="fi-sheet" id="fiSheet">
+    <header class="fi-h"><div><span class="mono">Nostro Caffè · Ficha técnica</span><h3>${esc(r.nombre)}</h3><p>${pl?esc(pl.cat)+" · "+esc(pl.n):"Receta independiente"} · Código ${esc(r.id)}</p></div>${foto?`<img src="${esc(foto)}" alt="">`:""}</header>
+    <div class="fi-meta"><div><span>Rinde</span><b>${por} ${por===1?"porción":"porciones"}</b></div><div><span>Tiempo</span><b>${r.tiempo?r.tiempo+" min":"—"}</b></div><div><span>Ingredientes</span><b>${r.ingredientes.length}</b></div>${cost&&cost.total?`<div><span>Costo por porción</span><b>${colones(Math.round(cost.porcion))}</b></div>${pl&&pl.p?`<div><span>Costo / precio</span><b>${(cost.porcion/pl.p*100).toFixed(0)}%</b></div>`:""}`:""}<div><span>Actualizada</span><b>${esc(String(r.actualizada||r.creada||"").slice(0,10))}</b></div></div>
+    <table class="fi-t"><thead><tr><th>Ingrediente</th><th>Por porción</th><th>Total (${por})</th><th>Unidad</th>${cost?"<th>Costo total</th>":""}</tr></thead><tbody>${r.ingredientes.map(i=>{const c=cost?costoIng(i):null;return `<tr><td>${esc(i.n)}</td><td>${i.c?fiNum(i.c/(r.porciones||1)):"—"}</td><td><b>${i.c?fiNum(i.c*k):"—"}</b></td><td>${esc(i.u)}</td>${cost?`<td>${c!=null?colones(Math.round(c*k)):"—"}</td>`:""}</tr>`;}).join("")}</tbody></table>
+    ${pasos.length?`<div class="fi-blk"><h5>Preparación</h5><ol>${pasos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol></div>`:""}
+    <div class="fi-grid">${blk("Montaje y presentación",fi.montaje)}${blk("Utensilios y equipo",fi.utensilios)}${blk("Conservación",fi.conservacion)}${blk("Vida útil",fi.vida)}${blk("Alérgenos",fi.alergenos)}${blk("Puntos críticos de control",fi.control)}${blk("Notas",r.notas)}</div>
+    ${!fi.montaje&&!fi.utensilios&&!fi.conservacion&&!fi.alergenos?`<p class="note-sm fi-hint">Completa montaje, utensilios, conservación y alérgenos en «Editar receta» → Ficha técnica.</p>`:""}
+  </article>`;}
+document.addEventListener("change",e=>{if(e.target.id==="fiSel"){FI.sel=e.target.value;FI.por=0;fiRender();}if(e.target.id==="fiPor"){FI.por=Math.max(1,+e.target.value||1);fiRender();}});
+document.addEventListener("click",e=>{
+  if(e.target.id==="fiPrint"){document.body.classList.add("print-ficha");setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove("print-ficha"),500);},50);return;}
+  if(e.target.id==="fiEdit"){const r=REC.lista.find(x=>x.id===FI.sel);if(!r)return;REC.edit=JSON.parse(JSON.stringify(r));document.querySelector('.adm-tabs [data-tab="recetas"]').click();setTimeout(()=>{recRender();const x=$("#recEd");if(x)x.scrollIntoView({behavior:"smooth",block:"start"});},60);}
+});
 /* --- Insumos: costo por receta e inventario con mínimos --- */
 let INS=[],INS_OK=false;
 const U_BASE={g:["g",1],kg:["g",1000],oz:["g",28.35],pizca:["g",0.5],ml:["ml",1],l:["ml",1000],cda:["ml",15],cdta:["ml",5],taza:["ml",240],u:["u",1],rebanada:["u",1],"porción":["u",1]};
